@@ -32,7 +32,7 @@ public class LoginController {
                       HttpServletResponse response,
                       @RequestParam("username") String username,
                       @RequestParam("password") String password,
-                      @RequestParam("next") String next){
+                      @RequestParam(value = "next" ,required = false) String next){
         try {
             Map<String,String> map = userService.register(username,password);
             if(map.containsKey("ticket")){
@@ -58,7 +58,7 @@ public class LoginController {
 
 
     @RequestMapping("/reglogin")
-    public String reg(Model model,@RequestParam("next") String next){
+    public String reg(Model model,@RequestParam(value = "next" ,required = false) String next){
         model.addAttribute("next",next);
         return "login";
     }
@@ -69,7 +69,7 @@ public class LoginController {
                         HttpServletResponse response,
                         @RequestParam("username") String username,
                         @RequestParam("password") String password,
-                        @RequestParam("next") String next,
+                        @RequestParam(value = "next" ,required = false) String next,
                         @RequestParam(value = "rememberme",defaultValue ="false") boolean rememberme){
 
         try {

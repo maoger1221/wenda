@@ -3,6 +3,7 @@ package cn.edu.tj.wenda.dao;
 import cn.edu.tj.wenda.model.Question;
 
 import org.apache.ibatis.annotations.*;
+import org.apache.struts.chain.commands.servlet.SelectForward;
 
 import java.util.List;
 
@@ -24,4 +25,6 @@ public interface QuestionDao {
                                          @Param("offset") int offset,
                                          @Param("limit") int limit);
 
+    @Select({"select", SELECT_FIELDS," from ",TABLE_NAME," where id = #{id} "})
+    Question selectById(int id);
 }
