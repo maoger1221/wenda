@@ -1,7 +1,7 @@
 package cn.edu.tj.wenda.controller;
 
-import cn.edu.tj.wenda.model.HostHolder;
-import cn.edu.tj.wenda.model.Question;
+import cn.edu.tj.wenda.model.*;
+import cn.edu.tj.wenda.service.CommentService;
 import cn.edu.tj.wenda.service.QuestionService;
 import cn.edu.tj.wenda.service.UserService;
 import cn.edu.tj.wenda.utils.WendaUtil;
@@ -12,7 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+
 /**
  * Created by mao on 2017/5/23.
  */
@@ -24,7 +27,8 @@ public class QuestionController {
     HostHolder hostHolder;
     @Autowired
     UserService userService;
-
+    @Autowired
+    CommentService commentService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class);
 
@@ -40,8 +44,8 @@ public class QuestionController {
             if(hostHolder.getUser() != null){
                 question.setUserId(hostHolder.getUser().getId());
             }else{
-//                question.setUserId(WendaUtil.ANONYMOUS_USERID);
-                return WendaUtil.getJSONString(999);
+                question.setUserId(WendaUtil.ANONYMOUS_USERID);
+//                return WendaUtil.getJSONString(999);
             }
 
             if (questionService.addQuestion(question) > 0){
@@ -58,7 +62,16 @@ public class QuestionController {
     public String questionDetail(Model model, @PathVariable("qid") int qid){
         Question question = questionService.getQuestion(qid);
         model.addAttribute("question",question);
-        model.addAttribute("user",userService.getUser(question.getUserId()));
+//        model.addAttribute("user",userService.getUser(question.getUserId()));
+        List<Comment> commentList = commentService.getCommentByEntity(qid, EntityType.ENTITY_QUESTION);
+        List<ViewObject> comments = new ArrayList<>();
+        for (Comment comment : commentList){
+            ViewObject vo = new ViewObject();
+            vo.set("comment",comment);
+            vo.set("user",userService.getUser(comment.getUserId()));
+            comments.add(vo);
+        }
+        model.addAttribute("comments",comments);
         return "detail";
     }
 }

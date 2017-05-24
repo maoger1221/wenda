@@ -31,12 +31,15 @@ public class QuestionService {
         //敏感词过滤
         question.setContent(sensitiveService.filter(question.getContent()));
         question.setTitle(sensitiveService.filter(question.getTitle()));
-
         return questionDao.addQuestion(question) > 0 ? question.getId() : 0;
 
     }
 
     public Question getQuestion(int id){
         return questionDao.selectById(id);
+    }
+
+    public int updateCommentCount(int id,int commentCount){
+        return questionDao.updateCommentCount(id,commentCount);
     }
 }
