@@ -2,6 +2,7 @@ package cn.edu.tj.wenda.controller;
 
 import cn.edu.tj.wenda.model.*;
 import cn.edu.tj.wenda.service.CommentService;
+import cn.edu.tj.wenda.service.LikeService;
 import cn.edu.tj.wenda.service.QuestionService;
 import cn.edu.tj.wenda.service.UserService;
 import cn.edu.tj.wenda.utils.WendaUtil;
@@ -29,6 +30,8 @@ public class QuestionController {
     UserService userService;
     @Autowired
     CommentService commentService;
+    @Autowired
+    LikeService likeService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class);
 
@@ -69,6 +72,14 @@ public class QuestionController {
             ViewObject vo = new ViewObject();
             vo.set("comment",comment);
             vo.set("user",userService.getUser(comment.getUserId()));
+
+            if (hostHolder.getUser() == null){
+                vo.set("liked",0);//0表示不赞也不踩，1赞，-1踩
+            }else {
+                vo.set("liked",likeService.getLikeStatus(hostHolder.getUser().getId(),EntityType.ENTITY_COMMENT,comment.getId()));
+            }
+            vo.set("likeCount",likeService.getLikeCount(EntityType.ENTITY_COMMENT,comment.getId()));
+
             comments.add(vo);
         }
         model.addAttribute("comments",comments);
