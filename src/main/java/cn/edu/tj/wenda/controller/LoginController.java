@@ -1,5 +1,8 @@
 package cn.edu.tj.wenda.controller;
 
+import cn.edu.tj.wenda.async.EventModel;
+import cn.edu.tj.wenda.async.EventProducer;
+import cn.edu.tj.wenda.async.EventType;
 import cn.edu.tj.wenda.service.UserService;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -24,6 +27,8 @@ public class LoginController {
     @Autowired
     UserService userService;
 
+    @Autowired
+    EventProducer eventProducer;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
@@ -78,6 +83,13 @@ public class LoginController {
                 Cookie cookie = new Cookie("ticket",map.get("ticket"));
                 cookie.setPath("/");
                 response.addCookie(cookie);
+
+                //登陆异常发送邮件
+                eventProducer.fireEvent(new EventModel(EventType.LOGIN)
+                        .setExt("email","523421291@qq.com").setExt("username",username)
+                        .setActorId(userService.selectUserByName(username).getId()));
+
+
                 //如果有next参数，即从其他页面跳转
                 if(StringUtils.isNotBlank(next)){
                     return "redirect:" + next;

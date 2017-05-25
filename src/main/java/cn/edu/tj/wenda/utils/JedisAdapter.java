@@ -83,7 +83,7 @@ public class JedisAdapter implements InitializingBean {
         return false;
     }
 
-    /*public List<String> brpop(int timeout, String key) {
+    public List<String> brpop(int timeout, String key) {
         Jedis jedis = null;
         try {
             jedis = pool.getResource();
@@ -252,5 +252,5 @@ public class JedisAdapter implements InitializingBean {
             }
         }
         return null;
-    }*/
+    }
 }
