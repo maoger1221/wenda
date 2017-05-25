@@ -1,10 +1,7 @@
 package cn.edu.tj.wenda.controller;
 
 import cn.edu.tj.wenda.model.*;
-import cn.edu.tj.wenda.service.CommentService;
-import cn.edu.tj.wenda.service.LikeService;
-import cn.edu.tj.wenda.service.QuestionService;
-import cn.edu.tj.wenda.service.UserService;
+import cn.edu.tj.wenda.service.*;
 import cn.edu.tj.wenda.utils.WendaUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,6 +29,8 @@ public class QuestionController {
     CommentService commentService;
     @Autowired
     LikeService likeService;
+    @Autowired
+    FollowService followService;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class);
 
@@ -83,6 +82,30 @@ public class QuestionController {
             comments.add(vo);
         }
         model.addAttribute("comments",comments);
+
+        //关注该问题的用户
+        List<Integer> users = followService.getFollowers(EntityType.ENTITY_QUESTION,qid,0,10);
+        List<ViewObject> followUsers = new ArrayList<>();
+
+        for (int uid : users){
+            ViewObject vo = new ViewObject();
+            User user = userService.getUser(uid);
+            if (user == null){
+                continue;
+            }
+            vo.set("id",uid);
+            vo.set("name",user.getName());
+            vo.set("headUrl",user.getHeadUrl());
+            followUsers.add(vo);
+        }
+        model.addAttribute("followUsers",followUsers);
+        if (hostHolder.getUser()!=null){
+            model.addAttribute("followed",followService.isFollower(hostHolder.getUser().getId(),EntityType.ENTITY_QUESTION,qid));
+        }else{
+            model.addAttribute("followed",false);
+        }
+
+
         return "detail";
     }
 }

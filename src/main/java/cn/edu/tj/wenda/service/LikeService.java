@@ -1,9 +1,12 @@
 package cn.edu.tj.wenda.service;
 
+import cn.edu.tj.wenda.model.EntityType;
 import cn.edu.tj.wenda.utils.JedisAdapter;
 import cn.edu.tj.wenda.utils.RedisKeyUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by mao on 2017/5/24.
@@ -12,6 +15,8 @@ import org.springframework.stereotype.Service;
 public class LikeService {
     @Autowired
     JedisAdapter jedisAdapter;
+    @Autowired
+    CommentService commentService;
 
     public long like(int userId,int entityType,int entityId){
         String likeKey = RedisKeyUtil.getLikeKey(entityType,entityId);
@@ -44,6 +49,18 @@ public class LikeService {
             return 1;
         }else if(jedisAdapter.sismember(disLikeKey,String.valueOf(userId))){
             return -1;
+        }
+        return 0;
+    }
+
+    public long getUserLikedCount(int entityType,int userId){
+        if (entityType == EntityType.ENTITY_COMMENT){
+            List<Integer> commentIds = commentService.getUserComment(userId);
+            long userLikedCount = 0;
+            for (int commentId : commentIds){
+                userLikedCount += getLikeCount(entityType,commentId);
+            }
+            return userLikedCount;
         }
         return 0;
     }

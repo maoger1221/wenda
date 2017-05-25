@@ -39,4 +39,12 @@ public class CommentService {
     public Comment getCommentById(int id){
         return commentDao.selectCommentById(id);
     }
+
+    public int getUserCommentCount(int userId){
+        return commentDao.getUserCommentCount(userId);
+    }
+
+    public List<Integer> getUserComment(int userId){
+        return commentDao.getUserComment(userId);
+    }
 }

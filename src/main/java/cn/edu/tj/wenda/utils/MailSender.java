@@ -29,7 +29,7 @@ public class MailSender implements InitializingBean {
                                         String template, Map<String, Object> model) {
         try {
             String nick = MimeUtility.encodeText("maomao");
-            InternetAddress from = new InternetAddress(nick + "<mpy_1012@163.com>");
+            InternetAddress from = new InternetAddress(nick + "<tjmao1221@163.com>");
             MimeMessage mimeMessage = mailSender.createMimeMessage();
             MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage);
             String result = VelocityEngineUtils
@@ -49,7 +49,7 @@ public class MailSender implements InitializingBean {
     @Override
     public void afterPropertiesSet() throws Exception {
         mailSender = new JavaMailSenderImpl();
-        mailSender.setUsername("mpy_1012@163.com");
+        mailSender.setUsername("tjmao1221@163.com");
         //这里不是登陆密码，是163邮箱授权的客户端授权码
         mailSender.setPassword("sendmail1");
         mailSender.setHost("smtp.163.com");
