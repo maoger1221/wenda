@@ -1,5 +1,8 @@
 package cn.edu.tj.wenda.controller;
 
+import cn.edu.tj.wenda.async.EventModel;
+import cn.edu.tj.wenda.async.EventProducer;
+import cn.edu.tj.wenda.async.EventType;
 import cn.edu.tj.wenda.model.*;
 import cn.edu.tj.wenda.service.*;
 import cn.edu.tj.wenda.utils.WendaUtil;
@@ -31,6 +34,8 @@ public class QuestionController {
     LikeService likeService;
     @Autowired
     FollowService followService;
+    @Autowired
+    EventProducer eventProducer;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(QuestionController.class);
 
@@ -51,6 +56,9 @@ public class QuestionController {
             }
 
             if (questionService.addQuestion(question) > 0){
+                eventProducer.fireEvent(new EventModel(EventType.ADD_QUESTION)
+                        .setActorId(question.getUserId()).setEntityId(question.getId())
+                        .setExt("title", question.getTitle()).setExt("content", question.getContent()));
                 return WendaUtil.getJSONString(0);
             }
 

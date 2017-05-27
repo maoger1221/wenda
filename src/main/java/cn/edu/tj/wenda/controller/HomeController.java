@@ -71,6 +71,10 @@ public class HomeController {
         List<ViewObject> vos = new ArrayList<ViewObject>();
         for(Question question : questionList){
             ViewObject vo = new ViewObject();
+            //首页不要让问题显示的太长
+            if(question.getContent().length() > 300){
+                question.setContent(question.getContent().substring(0,300)+"......");
+            }
             vo.set("question",question);
             vo.set("user",userService.getUser(question.getUserId()));
             vo.set("followCount", followService.getFollowerCount(EntityType.ENTITY_QUESTION, question.getId()));
