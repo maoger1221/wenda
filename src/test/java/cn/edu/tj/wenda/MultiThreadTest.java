@@ -8,7 +8,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * Created by mao on 2017/5/23.
  */
 public class MultiThreadTest {
-    public static void main(String[] args) {
+    public static void mainx(String[] args) {
 //        testThread();
 //        testBlockingQueue();
 //        testThreadLocal();

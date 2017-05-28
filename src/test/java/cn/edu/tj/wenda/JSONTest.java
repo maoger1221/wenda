@@ -9,7 +9,7 @@ import com.alibaba.fastjson.JSONObject;
  */
 public class JSONTest {
 
-    public static void main(String[] args) {
+    public static void mainx(String[] args) {
         User user = new User();
         user.setName("mao");
         user.setPassword("xixi");
