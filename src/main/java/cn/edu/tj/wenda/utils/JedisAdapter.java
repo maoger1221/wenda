@@ -82,7 +82,7 @@ public class JedisAdapter implements InitializingBean {
         }
         return false;
     }
-
+    //list中阻塞的获取一个元素
     public List<String> brpop(int timeout, String key) {
         Jedis jedis = null;
         try {
