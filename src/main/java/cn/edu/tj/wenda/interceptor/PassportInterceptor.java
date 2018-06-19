@@ -40,13 +40,13 @@ public class PassportInterceptor implements HandlerInterceptor{
         }
 
         LoginTicket loginTicket = loginTicketDao.selectByTicket(ticket);
-        if(loginTicket == null || loginTicket.getStatus() == 1 || loginTicket.getExpired().before(new Date())){
+        if(loginTicket == null || loginTicket.getStatus() == 1 || loginTicket.getExpired().before(new Date())){//过期时间
             return true;
         }
         //将当前线程得到的user放入HostHolder
         User user = userDao.selectById(loginTicket.getUserId());
         hostHolder.setUser(user);
-        return true;
+        return true;//放行
     }
     //页面渲染前
     @Override

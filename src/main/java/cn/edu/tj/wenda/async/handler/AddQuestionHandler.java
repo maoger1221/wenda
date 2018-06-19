@@ -23,7 +23,7 @@ public class AddQuestionHandler implements EventHandler{
 
     @Override
     public void doHandle(EventModel model) {
-        try {
+        try {//添加问题后，加入到solr中
             searchService.indexQuestion(model.getEntityId(), model.getExt("title"), model.getExt("content"));
         } catch (Exception e) {
             LOGGER.error("增加题目索引失败" + e.getMessage());

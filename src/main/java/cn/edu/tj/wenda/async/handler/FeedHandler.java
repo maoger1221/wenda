@@ -57,8 +57,6 @@ public class FeedHandler implements EventHandler{
             String timelineKey = RedisKeyUtil.getTimelineKey(follower);
             jedisAdapter.lpush(timelineKey,String.valueOf(feed.getId()));
         }
-
-
     }
 
     @Override
